@@ -13,4 +13,4 @@ class Mpu6050 {
     int getAccelerometerRange();
     int getGyroRange();
     int getFilterBandwidth();
-}
+};
