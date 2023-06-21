@@ -51,5 +51,29 @@ void reconnect() {
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+  if (!client.connected()) {
+    reconnect();
+  }
+  client.loop();
+
+  delay(1000);
+
+  int h = mpu6050.getAccelerometerRange
+  int g = mpu6050.getGyroRange();
+  int f = mpu6050.getFilterBandwidth();
+
+  StaticJsonDocument<200> jsonDocument;
+  jsonDocument["accelerometerrange"] = t;
+  jsonDocument["gyrorange"] = g;
+  jsonDocument["filterbandwidth"] = f;
+  
+  serializeJson(jsonDocument, Serial);
+
+  String json_value;
+  serializeJson(jsonDocument, json_value);
+
+  char mqtt_value[200];
+  json_value.toCharArray(mqtt_value, 200);
+  
+  client.publish("/joel-sense-3-movement/sensor", mqtt_value, true);
 }
