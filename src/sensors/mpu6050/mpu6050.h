@@ -16,5 +16,5 @@ class Mpu6050 {
     void loop();
     Acceleration getAccelerometerRange();
     Rotation getGyroRange();
-    int getFilterBandwidth();
+    float getTemperature(); 
 };

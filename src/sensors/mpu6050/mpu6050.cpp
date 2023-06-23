@@ -30,6 +30,6 @@ Rotation Mpu6050::getGyroRange() {
   return Rotation(g.gyro.x, g.gyro.y, g.gyro.z);
 }
 
-int Mpu6050::getFilterBandwidth() {
-
+float Mpu6050::getTemperature() {
+  return temp.temperature;
 }

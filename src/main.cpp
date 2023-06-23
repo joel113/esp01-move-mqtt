@@ -1,6 +1,6 @@
 #include <Arduino.h>
 #include <WiFi.h>
-#include "sensors/mpu6050.h"
+#include "sensors/mpu6050/mpu6050.h"
 #include "credentials/credentials.h"
 #include <PubSubClient.h>
 #include <ArduinoJson.h>
@@ -18,8 +18,8 @@ void setup() {
 
   // Setup wifi connection
   Serial.print("Connecting to ");
-  Serial.println(ssid);
-  WiFi.mode(WIFI_STA);
+  Serial.println(WIFI_SSID);
+  // WiFi.mode(WIFI_STA);
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
@@ -56,17 +56,23 @@ void loop() {
   }
   client.loop();
 
-  delay(1000);
+  DynamicJsonDocument jsonDocument(1024);
 
-  int h = mpu6050.getAccelerometerRange
-  int g = mpu6050.getGyroRange();
-  int f = mpu6050.getFilterBandwidth();
+  for(int i = 0; i < 100; i++) {
+    mpu6050.loop();
+    Acceleration a = mpu6050.getAccelerometerRange();
+    Rotation g = mpu6050.getGyroRange();
+    float t = mpu6050.getTemperature();
+    jsonDocument[i]["acceleration"]["x"] = a.getX();
+    jsonDocument[i]["acceleration"]["y"] = a.getY();
+    jsonDocument[i]["acceleration"]["z"] = a.getZ();
+    jsonDocument[i]["rotation"]["x"] = g.getX();
+    jsonDocument[i]["rotation"]["y"] = g.getY();
+    jsonDocument[i]["rotation"]["z"] = g.getZ();
+    jsonDocument[i]["temperature"] = t;
+    delay(10);
+  }
 
-  StaticJsonDocument<200> jsonDocument;
-  jsonDocument["accelerometerrange"] = t;
-  jsonDocument["gyrorange"] = g;
-  jsonDocument["filterbandwidth"] = f;
-  
   serializeJson(jsonDocument, Serial);
 
   String json_value;
