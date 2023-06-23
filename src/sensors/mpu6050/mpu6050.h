@@ -3,6 +3,8 @@
 #include <Adafruit_Sensor.h>
 #include <Wire.h>
 #include <SoftwareSerial.h>
+#include "acceleration.h"
+#include "rotation.h"
 
 class Mpu6050 {
     Adafruit_MPU6050 mpu;
@@ -13,6 +15,6 @@ class Mpu6050 {
     void setup();
     void loop();
     Acceleration getAccelerometerRange();
-    int getGyroRange();
+    Rotation getGyroRange();
     int getFilterBandwidth();
 };

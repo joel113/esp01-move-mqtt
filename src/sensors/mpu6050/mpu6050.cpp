@@ -1,5 +1,4 @@
 #include "mpu6050.h"
-#include "acceleration.h"
 
 void Mpu6050::setup() {
   mySerial.begin(115200);
@@ -27,8 +26,8 @@ Acceleration Mpu6050::getAccelerometerRange() {
   return Acceleration(a.acceleration.x, a.acceleration.y, a.acceleration.z);
 }
 
-int Mpu6050::getGyroRange() {
-
+Rotation Mpu6050::getGyroRange() {
+  return Rotation(g.gyro.x, g.gyro.y, g.gyro.z);
 }
 
 int Mpu6050::getFilterBandwidth() {

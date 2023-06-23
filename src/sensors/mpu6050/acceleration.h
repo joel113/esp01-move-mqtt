@@ -11,4 +11,4 @@ class Acceleration {
     int getX();
     int getY();
     int getZ();
-}
+};
