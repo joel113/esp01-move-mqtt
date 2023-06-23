@@ -7,10 +7,12 @@
 class Mpu6050 {
     Adafruit_MPU6050 mpu;
     SoftwareSerial mySerial;
+    sensors_event_t a, g, temp;
   public:
     Mpu6050() {};
     void setup();
-    int getAccelerometerRange();
+    void loop();
+    Acceleration getAccelerometerRange();
     int getGyroRange();
     int getFilterBandwidth();
 };
