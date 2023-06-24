@@ -58,7 +58,7 @@ void loop() {
 
   DynamicJsonDocument jsonDocument(1024);
 
-  for(int i = 0; i < 100; i++) {
+  for(int i = 0; i < 10; i++) {
     mpu6050.loop();
     Acceleration a = mpu6050.getAccelerometerRange();
     Rotation g = mpu6050.getGyroRange();
@@ -70,7 +70,7 @@ void loop() {
     jsonDocument[i]["rotation"]["y"] = g.getY();
     jsonDocument[i]["rotation"]["z"] = g.getZ();
     jsonDocument[i]["temperature"] = t;
-    delay(10);
+    delay(100);
   }
 
   serializeJson(jsonDocument, Serial);
@@ -81,5 +81,5 @@ void loop() {
   char mqtt_value[200];
   json_value.toCharArray(mqtt_value, 200);
   
-  client.publish("/joel-sense-3-movement/sensor", mqtt_value, true);
+  client.publish("/joel-sense-3/sensor", mqtt_value, true);
 }
