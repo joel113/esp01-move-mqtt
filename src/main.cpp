@@ -12,6 +12,9 @@ PubSubClient client(espClient);
 void setup() {
   // Begin serial and setup sensors
   Serial.begin(115200);
+
+  Serial.println("Initializing sensors");
+
   mpu6050.setup();
 
   delay(10);
