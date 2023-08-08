@@ -1,19 +1,17 @@
-#include <Adafruit_MPU6050.h>
-#include <Adafruit_Sensor.h>
 #include <Wire.h>
 #include <SoftwareSerial.h>
 #include "acceleration.h"
 #include "rotation.h"
 
-class Mpu6050 {
-    Adafruit_MPU6050 mpu;
+class Mpu6050Wire {
     SoftwareSerial mySerial;
-    sensors_event_t a, g, temp;
+    const int MPU = 0x68;
+    int16_t AcX, AcY, AcZ, GyX, GyY, GyZ;
+    float gForceX, gForceY, gForceZ, rotX, rotY, rotZ;
   public:
-    Mpu6050() {};
+    Mpu6050Wire() {};
     void setup();
     void loop();
     Acceleration getAccelerometerRange();
     Rotation getGyroRange();
-    float getTemperature(); 
 };

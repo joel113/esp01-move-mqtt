@@ -1,12 +1,12 @@
 #include <Arduino.h>
 #include <WiFi.h>
-#include "sensors/mpu6050/mpu6050.h"
+#include "sensors/mpu6050/mpu6050wire.h"
 #include "credentials/credentials.h"
 #include <PubSubClient.h>
 #include <ArduinoJson.h>
 
 WiFiClient espClient;
-Mpu6050 mpu6050;
+Mpu6050Wire mpu6050;
 PubSubClient client(espClient);
 
 void setup() {
@@ -65,14 +65,12 @@ void loop() {
     mpu6050.loop();
     Acceleration a = mpu6050.getAccelerometerRange();
     Rotation g = mpu6050.getGyroRange();
-    float t = mpu6050.getTemperature();
     jsonDocument[i]["acceleration"]["x"] = a.getX();
     jsonDocument[i]["acceleration"]["y"] = a.getY();
     jsonDocument[i]["acceleration"]["z"] = a.getZ();
     jsonDocument[i]["rotation"]["x"] = g.getX();
     jsonDocument[i]["rotation"]["y"] = g.getY();
     jsonDocument[i]["rotation"]["z"] = g.getZ();
-    jsonDocument[i]["temperature"] = t;
     delay(100);
   }
 
