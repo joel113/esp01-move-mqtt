@@ -1,53 +1,60 @@
 #include <Arduino.h>
 #include <WiFi.h>
-#include "sensors/mpu6050/mpu6050wire.h"
-#include "credentials/credentials.h"
 #include <PubSubClient.h>
 #include <ArduinoJson.h>
+#include "sensors/mpu6050/mpu6050.h"
+#include "credentials/credentials.h"
+#include <Adafruit_MPU6050.h>
+#include <Adafruit_Sensor.h>
+#include <Wire.h>
+
+Adafruit_MPU6050 mpu;
 
 WiFiClient espClient;
-Mpu6050Wire mpu6050;
+Mpu6050 mpu6050;
 PubSubClient client(espClient);
 
-void setup() {
-  // Begin serial and setup sensors
-  Serial.begin(115200);
-
+void sensorSetup() {
   Serial.println("Initializing sensors");
-
   mpu6050.setup();
+}
 
-  delay(10);
-
-  // Setup wifi connection
+void wifiConnect() {
   Serial.print("Connecting to ");
   Serial.println(WIFI_SSID);
-  // WiFi.mode(WIFI_STA);
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
   while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
     Serial.print(".");
+    delay(500);
   }
   Serial.println("");
   Serial.println("WiFi connected");
-  Serial.println(WiFi.localIP());
+}
 
-  // Setup mqtt connection
-  client.setServer(MQTT_SERVER, 1883);
+void mqttSetup() {
+  client.setServer("joel-telegraf", 1883);
+}
 
-  delay(10000);
+void setup() {
+  Serial.begin(115200);
+  Serial.println("Waiting for serial");
+  while (!Serial) {
+    delay(10);
+  }
+  sensorSetup();
+  wifiConnect();
+  mqttSetup();
 }
 
 void reconnect() {
   while (!client.connected()) {
     Serial.print("Attempting MQTT connection...");
-    if (client.connect("joel-sense-1")) {
+    if (client.connect("joel-sense-movement")) {
       Serial.println("connected");
     } else {
       Serial.print("failed, rc=");
       Serial.print(client.state());
       Serial.println(" try again in 5 seconds");
-      // Wait 5 seconds before retrying
       delay(5000);
     }
   }
@@ -55,8 +62,10 @@ void reconnect() {
 
 void loop() {
   if (!client.connected()) {
+    Serial.println("foobar");
     reconnect();
   }
+  Serial.println("foobar2");
   client.loop();
 
   DynamicJsonDocument jsonDocument(1024);

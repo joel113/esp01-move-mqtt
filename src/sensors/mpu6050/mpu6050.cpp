@@ -1,19 +1,10 @@
 #include "mpu6050.h"
 
 void Mpu6050::setup() {
-  mySerial.begin(115200);
-
-  Serial.println("Waiting for serial");
-  while (!Serial) {
-    delay(10);
-  }
-
-  Serial.println("Serial initialized");
-
   if(!mpu.begin()) {
     while(1) {
       Serial.println("Waiting for MPU6050 to begin");
-      delay(10);
+      delay(100);
     }
   }
 
